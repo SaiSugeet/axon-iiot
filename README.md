@@ -167,9 +167,9 @@ axon/
 │ └── index.ts # TypeScript interfaces
 ├── public/ # Static assets
 ├── vercel.json # Vercel deployment config
-├── next.config.js
-├── tailwind.config.js
-└── README.md
+├── next.config.js # Next.js configuration
+├── tailwind.config.js # Tailwind CSS configuration
+└── README.md # Project documentation
 
 
 ---
@@ -190,9 +190,9 @@ axon/
 | Name | Role |
 |------|------|
 | G Sai Sugeet | Lead Developer & System Architect |
-| John Benny J | ML Pipeline & IASI Algorithm |
-| Neetha Udupa G | Communication Architecture |
-| S D Mukhesh | Hardware Integration & Testing |
+| S D Mukhesh | Backend Development & Testing |
+| John Benny J | Hardware Integration & Testing |
+| Neetha Udupa G | Hardware Integration & Communication |
 
 **Guide:** Dr. Agalya, Assistant Professor
 **Institution:** Dept. of Electrical & Electronics Engineering, New Horizon College of Engineering, Bengaluru — 560103
