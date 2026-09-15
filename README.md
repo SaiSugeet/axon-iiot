@@ -1,4 +1,4 @@
-# GuardRail Central
+# AXON
 
 *IRMS · EDGE-AI · TRACK HEALTH MONITOR*
 
@@ -8,7 +8,7 @@
 ![Styling](https://img.shields.io/badge/Styling-Tailwind%20CSS-38bdf8?style=flat-square&logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-A real-time railway track health monitoring dashboard built as Phase 1 simulation prototype for the IIOT Edge-AI Railway Supervision System.
+AXON (Adaptive eXtended-bridge Operational Network) — A three-layer Edge-AI IIoT framework for real-time infrastructure anomaly detection in transportation systems. Edge Node (Pi Zero 2W) → Android Termux Bridge → Central Server → Live Dashboard.
 
 ---
 
@@ -27,7 +27,7 @@ A real-time railway track health monitoring dashboard built as Phase 1 simulatio
 
 Indian Railways operates over 67,000 km of track across the country. Manual track inspection is conducted only once every 3–6 months, leaving a significant window during which cracks, joint failures, loose fasteners, and other structural faults go undetected — posing serious risks to passenger safety and infrastructure.
 
-GuardRail Central is the dashboard layer of an onboard edge-AI system designed to monitor track health on every train run. By mounting a vibration sensor (MPU6050) and a small AI module on the train, the system continuously analyses track conditions in real time — detecting anomalies, classifying faults, and surfacing hazards to a central safety operations console.
+AXON is the dashboard layer of an onboard edge-AI system designed to monitor track health on every train run. By mounting a vibration sensor (MPU6050) and a small AI module on the train, the system continuously analyses track conditions in real time — detecting anomalies, classifying faults, and surfacing hazards to a central safety operations console.
 
 At the core of the system is the **IRMS (Infrastructure Risk Monitoring Score)** — a single 0–100 composite score that combines vibration health, obstacle detection confidence, and communication reliability into one actionable metric. Operators can respond to track degradation before it becomes a failure.
 
@@ -118,8 +118,8 @@ The dashboard supports five track fault scenarios that can be switched live, eac
 **Installation**
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/guardrail-central.git
-cd guardrail-central
+git clone https://github.com/YOUR_USERNAME/axon-iiot.git
+cd axon-iiot
 npm install
 npm run dev
 ```
@@ -129,8 +129,8 @@ Open [http://localhost:3000](http://localhost:3000)
 **Login credentials (prototype)**
 
 ```
-Username: SaiSugeet
-Password: 12345
+Username: axon_admin
+Password: EdgeAI@2025
 ```
 
 ---
@@ -141,7 +141,7 @@ Password: 12345
 2. Go to [vercel.com](https://vercel.com) and sign in
 3. Click **New Project** → Import your GitHub repository
 4. Vercel auto-detects Next.js — click **Deploy**
-5. Your dashboard goes live at `https://guardrail-central.vercel.app`
+5. Your dashboard goes live at `https://axon-iiot.vercel.app`
 
 > Every future `git push` to the `main` branch automatically redeploys to Vercel.
 
@@ -150,7 +150,7 @@ Password: 12345
 ## 📁 Project Structure
 
 ```
-guardrail-central/
+axon-iiot/
 ├── app/
 │   ├── layout.tsx              # Root layout — Google Fonts, metadata
 │   ├── page.tsx                # Entry point — login gate / dashboard router

@@ -1,4 +1,4 @@
-# GuardRail Central — Complete Exam Explanation
+# AXON — Complete Exam Explanation
 ## IIOT Integrated Edge-AI Based Railway Track Health Monitoring and Supervision System
 
 **Subject:** 22EEE65 | **College:** New Horizon College of Engineering, Bengaluru | **AY:** 2025–26  
@@ -42,13 +42,13 @@ It is **Edge-AI** because the most time-critical computation — the YOLO obstac
 Phase 1 is a **fully working simulation** of the complete system. Real hardware is not yet assembled, but every software layer is built and functional:
 
 - The data pipeline that would carry sensor readings from train to cloud
-- The IRMS scoring formula that converts raw signals to a risk number
+- The IASI scoring formula that converts raw signals to a risk number
 - The FFT analysis that identifies fault signatures by frequency
 - The dashboard that a real safety operator would watch
 
 The simulation generates **statistically accurate fake sensor data** matching each fault type's real vibration signature. When an examiner watches the RAIL CRACK scenario, the FFT chart shifts to 26 Hz exactly as it would with real cracked-rail vibration data.
 
-> **One-line summary:** GuardRail Central is a real-time railway track health monitoring dashboard that converts continuous vibration and obstacle sensor data into a single safety score, enabling Indian Railways to catch track faults weeks before they become derailments.
+> **One-line summary:** AXON is a real-time railway track health monitoring dashboard that converts continuous vibration and obstacle sensor data into a single safety score, enabling Indian Railways to catch track faults weeks before they become derailments.
 
 ---
 
@@ -98,7 +98,7 @@ The `useSimulation.ts` hook plays the role of the Raspberry Pi. Every 1 second i
 2. **72-hour offline buffer**: India has many rural sections with no 4G coverage. The SQLite buffer stores up to 72 hours of data. Once the train enters coverage, all buffered data uploads automatically — no gaps in the health record.
 3. **Protocol translation**: MQTT works perfectly on a local Wi-Fi network. HTTPS works better for long-haul internet. The bridge translates between them.
 
-**What happens if the server goes offline:** The phone keeps collecting and buffering. The IRMS Communication Score in the dashboard drops (reflecting that the server is unreachable). Once connectivity restores, all data flows and the score recovers.
+**What happens if the server goes offline:** The phone keeps collecting and buffering. The IASI Communication Score in the dashboard drops (reflecting that the server is unreachable). Once connectivity restores, all data flows and the score recovers.
 
 ---
 
@@ -111,9 +111,9 @@ The laptop runs five software systems simultaneously:
 | **Mosquitto MQTT Broker** | Receives forwarded packets from Android bridge |
 | **FFT Processor** | Converts raw accelerometer time-series into frequency spectrum every 5 seconds |
 | **Isolation Forest** | Trained on NORMAL vibration data; scores every new packet 0–1 for anomaly level |
-| **IRMS Engine** | Combines Vibration Score, Obstacle Score, Communication Score into one IRMS number |
-| **Random Forest Classifier** | Looks at last 10 IRMS readings + trend + variance → outputs SAFE/MONITOR/ALERT/CRITICAL |
-| **Flask REST API** | Serves current IRMS, FFT, obstacle log as JSON; pushes to Render every 2 seconds |
+| **IASI Engine** | Combines Vibration Score, Obstacle Score, Communication Score into one IASI number |
+| **Random Forest Classifier** | Looks at last 10 IASI readings + trend + variance → outputs SAFE/MONITOR/ALERT/CRITICAL |
+| **Flask REST API** | Serves current IASI, FFT, obstacle log as JSON; pushes to Render every 2 seconds |
 
 **Why Ubuntu:** Linux provides the scientific Python stack (NumPy, scikit-learn, PyMQTT) without driver conflicts. In Phase 2, this would be a cloud VM (AWS EC2 or Azure) for 24/7 availability.
 
@@ -139,7 +139,7 @@ A railway safety monitoring dashboard is classified as **critical infrastructure
 
 ### What "Authorized Personnel Only" Means
 
-In the real system, only certified Railway Safety Division operators would have credentials. They would authenticate with their employee ID and a rotating OTP, and every login would be logged with timestamp and IP for audit. In Phase 1, we demonstrate this with a hardcoded credential pair (`SaiSugeet` / `12345`).
+In the real system, only certified Railway Safety Division operators would have credentials. They would authenticate with their employee ID and a rotating OTP, and every login would be logged with timestamp and IP for audit. In Phase 1, we demonstrate this with a hardcoded credential pair (`axon_admin` / `EdgeAI@2025`).
 
 ### Authentication Flow
 
@@ -151,7 +151,7 @@ In the real system, only certified Railway Safety Division operators would have 
 
 ### What the Operator Sees After Login
 
-The full dashboard immediately loads with live-updating data: device status cards, scenario control, IRMS gauge, risk classification, trend chart, FFT spectrum, obstacle log, and system health — all updating in real time.
+The full dashboard immediately loads with live-updating data: device status cards, scenario control, IASI gauge, risk classification, trend chart, FFT spectrum, obstacle log, and system health — all updating in real time.
 
 ---
 
@@ -186,11 +186,11 @@ The full dashboard immediately loads with live-updating data: device status card
 
 ### 4.2 — Track Scenario Control Panel
 
-**What it is:** A row of 5 buttons that let the operator (or demonstrator) switch between different simulated track conditions. Switching a scenario immediately changes the IRMS output range, FFT spectrum shape, and obstacle detection probabilities.
+**What it is:** A row of 5 buttons that let the operator (or demonstrator) switch between different simulated track conditions. Switching a scenario immediately changes the IASI output range, FFT spectrum shape, and obstacle detection probabilities.
 
 **The 5 scenarios and what they physically mean:**
 
-| Scenario | IRMS Range | Physical Meaning |
+| Scenario | IASI Range | Physical Meaning |
 |---|---|---|
 | **NORMAL** | 5–18 | Track is in excellent condition. All joints are tight, fasteners are secure, rail surface is smooth. Vibration is low and steady. |
 | **JOINT FAULT** | 22–38 | The fishplate (metal plate connecting two rail sections at a joint) is losing its bolt tension. As the train wheel crosses the joint, there's a rhythmic "clunk" — periodic impact every ~15 metres (joint spacing). |
@@ -202,16 +202,16 @@ The full dashboard immediately loads with live-updating data: device status card
 
 ---
 
-### 4.3 — IRMS Gauge
+### 4.3 — IASI Gauge
 
-**What IRMS Is:**
+**What IASI Is:**
 
-IRMS stands for **Infrastructure Risk Monitoring Score**. It is a single number from 0 to 100 that represents the combined safety risk of the current track section. We invented this composite metric specifically for this project because we needed one number that operators could act on instantly — rather than asking them to simultaneously interpret vibration amplitude, FFT peaks, obstacle confidence, and network latency.
+IASI stands for **Infrastructure Anomaly Severity Index**. It is a single number from 0 to 100 that represents the combined safety risk of the current track section. We invented this composite metric specifically for this project because we needed one number that operators could act on instantly — rather than asking them to simultaneously interpret vibration amplitude, FFT peaks, obstacle confidence, and network latency.
 
 **The Formula:**
 
 ```
-IRMS = (Vibration Score × 0.50) + (Obstacle Score × 0.35) + (Communication Score × 0.15)
+IASI = (Vibration Score × 0.50) + (Obstacle Score × 0.35) + (Communication Score × 0.15)
 ```
 
 Each component score is normalised to 0–100, then weighted:
@@ -227,7 +227,7 @@ Each component score is normalised to 0–100, then weighted:
 - **Obstacle Score:** `(1 - confidence_of_CLEAR_prediction) × 100`. If the camera is 98% sure the track is clear, obstacle score is 2. If it's 65% sure it sees a person, obstacle score is 35.
 - **Communication Score:** Derived from packet loss rate, API latency, and buffer queue depth
 
-**In the simulation:** The `useSimulation` hook generates IRMS directly from the scenario's `irmsMin`/`irmsMax` range, then reverse-computes the component breakdown proportionally (vibration ≈ 55%, obstacle ≈ 20%, communication = remainder). The SystemHealth panel displays these components live.
+**In the simulation:** The `useSimulation` hook generates IASI directly from the scenario's `irmsMin`/`irmsMax` range, then reverse-computes the component breakdown proportionally (vibration ≈ 55%, obstacle ≈ 20%, communication = remainder). The SystemHealth panel displays these components live.
 
 **What the numbers mean physically:**
 - **0:** Perfect track, no obstacles, full connectivity — ideal conditions
@@ -248,7 +248,7 @@ Each component score is normalised to 0–100, then weighted:
 
 **The Four Classifications and Required Actions:**
 
-| Classification | IRMS Range | Colour | Required Action |
+| Classification | IASI Range | Colour | Required Action |
 |---|---|---|---|
 | **SAFE** | 0–25 | Deep green | No action. Log the reading. Track health is nominal. |
 | **MONITOR** | 26–50 | Dark gold | Flag for next maintenance cycle. Increase inspection frequency for this section. Consider placing a manual check-point at the next scheduled stop. |
@@ -257,7 +257,7 @@ Each component score is normalised to 0–100, then weighted:
 
 **How the Random Forest determines the classification (real system):**
 
-Rather than simply checking `if irms > 75 → CRITICAL`, the Random Forest classifier looks at **10 consecutive IRMS readings** (the last 10 seconds of data) and extracts:
+Rather than simply checking `if irms > 75 → CRITICAL`, the Random Forest classifier looks at **10 consecutive IASI readings** (the last 10 seconds of data) and extracts:
 - The current value
 - The **slope** (rising or falling)
 - The **variance** (stable or oscillating)
@@ -269,9 +269,9 @@ This matters because: a value of 48 (technically MONITOR) that is **rising at 3 
 
 ---
 
-### 4.5 — IRMS Trend Chart (Last 60 Readings)
+### 4.5 — IASI Trend Chart (Last 60 Readings)
 
-**What It Shows:** A line chart plotting the last 60 IRMS values — one reading per second — giving a 60-second historical window of track health.
+**What It Shows:** A line chart plotting the last 60 IASI values — one reading per second — giving a 60-second historical window of track health.
 
 **Why 60 readings:** At 1 Hz, 60 readings = 60 seconds of history. This is enough to:
 - See if the score is rising (deteriorating), falling (recovering), or stable
@@ -323,7 +323,7 @@ The amplitude could be identical. The FFT reveals they are completely different 
 
 **Dominant Frequency:** The bar with the highest power value. Shown in the text below the chart. A dominant frequency shift from 5 Hz to 26 Hz is a clear indicator of a rail crack — this is the automated alarm trigger in the real system.
 
-**Update rate:** Every 5 seconds. FFT computation across 51 bins with 500 samples is more computationally intensive than a single IRMS calculation, so it runs less frequently.
+**Update rate:** Every 5 seconds. FFT computation across 51 bins with 500 samples is more computationally intensive than a single IASI calculation, so it runs less frequently.
 
 ---
 
@@ -351,7 +351,7 @@ The amplitude could be identical. The FFT reveals they are completely different 
 
 **CLEAR confidence is always 90–99%:** When the track is clear, the YOLO model is very confident. The range (not 100%) accounts for lighting conditions, camera blur at speed, and rain. This is realistic — no detection model is 100% certain.
 
-**How obstacle detection affects IRMS:** `Obstacle Score = (1 - CLEAR_confidence) × 100`. A 97% CLEAR reading contributes an Obstacle Score of 3. A 70% PERSON confidence contributes a score of 30, significantly raising the IRMS.
+**How obstacle detection affects IASI:** `Obstacle Score = (1 - CLEAR_confidence) × 100`. A 97% CLEAR reading contributes an Obstacle Score of 3. A 70% PERSON confidence contributes a score of 30, significantly raising the IASI.
 
 **SEVERE_DAMAGE scenario obstacle probabilities:**
 ```
@@ -366,7 +366,7 @@ In real physics: severe track damage often correlates with landslides, which als
 
 ### 4.8 — System Health Panel
 
-**What It Shows:** Four stats plus the live IRMS formula breakdown.
+**What It Shows:** Four stats plus the live IASI formula breakdown.
 
 | Metric | Source | What It Tells You |
 |---|---|---|
@@ -375,8 +375,8 @@ In real physics: severe track damage often correlates with landslides, which als
 | **API RESPONSE** | Simulated: 82–120ms random | Represents the round-trip latency from sensor data generation to dashboard receipt. In the real system, this would be the actual Flask API response time measured by the dashboard |
 | **MODEL CONFIDENCE** | Simulated: 90–98% random | The Random Forest classifier's confidence in its current risk classification. High confidence (>90%) means the trend and variance clearly indicate the class; low confidence means the readings are ambiguous |
 
-**IRMS Formula Breakdown:**
-The three component values (VIB + OBST + COMM) are shown live, adding up to the current IRMS score. This provides **transparency** — the examiner can verify that the formula is actually running and that the three components are sensible proportions of the total. In the simulation, VIB ≈ 55%, OBST ≈ 20%, COMM ≈ 25% of the total IRMS.
+**IASI Formula Breakdown:**
+The three component values (VIB + OBST + COMM) are shown live, adding up to the current IASI score. This provides **transparency** — the examiner can verify that the formula is actually running and that the three components are sensible proportions of the total. In the simulation, VIB ≈ 55%, OBST ≈ 20%, COMM ≈ 25% of the total IASI.
 
 **"Synthetic data simulation active":** This disclaimer is mandatory. In an engineering prototype, it is important to be clear that the displayed data is simulated, not from real sensors. Any real operator would need to know they are looking at a demonstration, not live track data.
 
@@ -404,13 +404,13 @@ The three component values (VIB + OBST + COMM) are shown live, adding up to the 
 | Spectral spread | How wide the energy distribution is |
 | High-frequency ratio | Fraction of total energy above 25 Hz |
 
-**What the output means:** The Isolation Forest returns an anomaly score from 0 (identical to training data) to 1 (completely different from anything seen in training). This score is the **Vibration Score** fed into the IRMS formula.
+**What the output means:** The Isolation Forest returns an anomaly score from 0 (identical to training data) to 1 (completely different from anything seen in training). This score is the **Vibration Score** fed into the IASI formula.
 
 ---
 
 ### 5.2 — Random Forest Classifier (Risk Classification)
 
-**What classification means here:** Given a sequence of 10 IRMS readings (the last 10 seconds), predict which of the four categories — SAFE, MONITOR, ALERT, CRITICAL — best describes the current situation.
+**What classification means here:** Given a sequence of 10 IASI readings (the last 10 seconds), predict which of the four categories — SAFE, MONITOR, ALERT, CRITICAL — best describes the current situation.
 
 **Why 10 readings, not 1:** A single reading could be a noise spike. Ten readings reveal the **trend**:
 - A value of 48 that has been at 48 for 10 seconds → MONITOR
@@ -420,19 +420,19 @@ The three component values (VIB + OBST + COMM) are shown live, adding up to the 
 
 | Feature | Why It Matters |
 |---|---|
-| Current IRMS | Absolute level |
+| Current IASI | Absolute level |
 | Mean of last 10 | Average level — filters out spikes |
 | Max of last 10 | Worst case in the window |
 | Min of last 10 | Best case in the window |
 | Variance | How noisy/unstable the readings are |
 | Slope (linear regression) | Is it rising, falling, or flat? |
-| IRMS at t-1, t-3, t-5, t-7, t-9 | Historical snapshots at 5 points |
+| IASI at t-1, t-3, t-5, t-7, t-9 | Historical snapshots at 5 points |
 | FFT high-frequency ratio | The spectral signature at this moment |
 | Obstacle confidence (latest) | Real-time life-safety input |
 
 **Training:** 2,000 synthetic labelled sequences (500 per class) are generated by running each scenario's data generator and applying the ground-truth label. Training takes 10–20 seconds on a laptop CPU. The resulting forest has 100 decision trees, each trained on a random subset of features and samples.
 
-**Why Random Forest:** It handles the mix of continuous values (IRMS, slope) and bounded values (confidence 0–1) without feature scaling. It gives a **probability output** (not just a label) so the confidence percentage in the System Health panel reflects genuine model uncertainty.
+**Why Random Forest:** It handles the mix of continuous values (IASI, slope) and bounded values (confidence 0–1) without feature scaling. It gives a **probability output** (not just a label) so the confidence percentage in the System Health panel reflects genuine model uncertainty.
 
 ---
 
@@ -461,7 +461,7 @@ Total: ≈ 2–4 seconds end-to-end
 - Maximum buffer depth: ~72 hours × 100 packets/second = ~26 million packets (~600 MB of SQLite data)
 
 **Link 3: Laptop → Render (HTTPS POST every 2 seconds)**
-- The Flask app on the laptop runs a background thread using `schedule` that packages the latest IRMS, FFT, and obstacle data as JSON and POSTs to `https://guardrail-api.onrender.com/update`
+- The Flask app on the laptop runs a background thread using `schedule` that packages the latest IASI, FFT, and obstacle data as JSON and POSTs to `https://guardrail-api.onrender.com/update`
 - Push (not pull) because the laptop has ephemeral connectivity — it may be behind NAT, making it unreachable by an external pull
 - 2-second interval balances freshness vs. Render API rate limits on the free tier
 
@@ -479,15 +479,15 @@ A train at 130 km/h travels **36 centimetres per millisecond**. In 4 seconds, it
 
 ---
 
-**Q1. What is IRMS and why did you create it?**
+**Q1. What is IASI and why did you create it?**
 
-IRMS — Infrastructure Risk Monitoring Score — is a composite 0–100 safety index we designed to give operators a single actionable number rather than making them interpret multiple independent signals simultaneously. We weighted it as 50% vibration (structural health), 35% obstacle detection (life-safety), and 15% communication health (system reliability). The weights reflect the relative urgency of each signal type for track safety.
+IASI — Infrastructure Anomaly Severity Index — is a composite 0–100 safety index we designed to give operators a single actionable number rather than making them interpret multiple independent signals simultaneously. We weighted it as 50% vibration (structural health), 35% obstacle detection (life-safety), and 15% communication health (system reliability). The weights reflect the relative urgency of each signal type for track safety.
 
 ---
 
 **Q2. Why does vibration get 50 points and not more?**
 
-We debated giving vibration 70 points, but the obstacle component needs to be substantial enough that a CLEAR detection on a badly damaged track still triggers an ALERT — the loco-pilot needs to slow down even if no obstacle is in sight. At 35 points, a PERSON detection (confidence 0.70) adds 21 points to IRMS on its own, enough to push a borderline MONITOR reading into ALERT. That is the right behaviour.
+We debated giving vibration 70 points, but the obstacle component needs to be substantial enough that a CLEAR detection on a badly damaged track still triggers an ALERT — the loco-pilot needs to slow down even if no obstacle is in sight. At 35 points, a PERSON detection (confidence 0.70) adds 21 points to IASI on its own, enough to push a borderline MONITOR reading into ALERT. That is the right behaviour.
 
 ---
 
@@ -511,13 +511,13 @@ HTTP is request-response: the client asks, the server answers. This requires the
 
 **Q6. What happens if the Android bridge loses connectivity?**
 
-The SQLite buffer absorbs all data during the outage. The IRMS Communication Score drops to reflect degraded connectivity — this correctly signals to the operator that they are not receiving live data. On the train itself, the Raspberry Pi continues running YOLO detection and generating local alerts independently. When connectivity restores, the buffer replays all stored packets in order, giving a complete historical record with no gaps.
+The SQLite buffer absorbs all data during the outage. The IASI Communication Score drops to reflect degraded connectivity — this correctly signals to the operator that they are not receiving live data. On the train itself, the Raspberry Pi continues running YOLO detection and generating local alerts independently. When connectivity restores, the buffer replays all stored packets in order, giving a complete historical record with no gaps.
 
 ---
 
 **Q7. Why is the communication score lower during network outages?**
 
-Because an operator receiving stale or delayed data is at higher risk than one receiving live data. The Communication Score quantifies the system's ability to deliver timely information. During an outage, latency spikes, packets are buffered (not live), and the operator may be making decisions on 30-second-old data. That is a real risk component that belongs in the IRMS.
+Because an operator receiving stale or delayed data is at higher risk than one receiving live data. The Communication Score quantifies the system's ability to deliver timely information. During an outage, latency spikes, packets are buffered (not live), and the operator may be making decisions on 30-second-old data. That is a real risk component that belongs in the IASI.
 
 ---
 
@@ -541,7 +541,7 @@ Quality of Service level 1 guarantees **at-least-once delivery**. The publisher 
 
 **Q11. Why does the Random Forest look at 10 readings and not just 1?**
 
-Ten readings give us the **slope and variance** of the IRMS signal — information that a single reading cannot provide. A single reading of 48 is ambiguous: is this a momentary spike from a bump, or is it a sustained rising fault? Ten readings make this clear: if the values are 38, 40, 41, 43, 44, 46, 46, 47, 48, 48, the slope is +1 point/second and this is clearly escalating. The Random Forest can classify this as ALERT before the reading ever crosses 50.
+Ten readings give us the **slope and variance** of the IASI signal — information that a single reading cannot provide. A single reading of 48 is ambiguous: is this a momentary spike from a bump, or is it a sustained rising fault? Ten readings make this clear: if the values are 38, 40, 41, 43, 44, 46, 46, 47, 48, 48, the slope is +1 point/second and this is clearly escalating. The Random Forest can classify this as ALERT before the reading ever crosses 50.
 
 ---
 
@@ -559,7 +559,7 @@ TinyML (Tiny Machine Learning) refers to ML models that have been optimised — 
 
 **Q14. Why does CRITICAL need an emergency stop and not just a warning?**
 
-At CRITICAL (IRMS > 75), the Isolation Forest has detected vibration patterns consistent with imminent rail failure. An IRMS of 80 means 50% of the structural risk budget is consumed by vibration alone — the crack is large, the energy is high, and another train or heavy freight wagon passing at speed could split the rail completely. A "warning" that a driver ignores for 30 seconds means 30 seconds at 130 km/h = 1.08 km of travel on a potentially breaking track. The emergency stop is the only responsible response.
+At CRITICAL (IASI > 75), the Isolation Forest has detected vibration patterns consistent with imminent rail failure. An IASI of 80 means 50% of the structural risk budget is consumed by vibration alone — the crack is large, the energy is high, and another train or heavy freight wagon passing at speed could split the rail completely. A "warning" that a driver ignores for 30 seconds means 30 seconds at 130 km/h = 1.08 km of travel on a potentially breaking track. The emergency stop is the only responsible response.
 
 ---
 
@@ -583,9 +583,9 @@ In Phase 1, the dashboard is a pure client-side simulation — it runs entirely 
 
 ---
 
-**Q18. Why does obstacle detection confidence affect IRMS?**
+**Q18. Why does obstacle detection confidence affect IASI?**
 
-Because a low-confidence detection is itself a safety risk. If the YOLO model is 70% confident that the object ahead is a person, that means it's 30% uncertain — in a life-safety context, 30% uncertainty is unacceptably high, and the system must treat it as if the person is definitely there. By incorporating confidence into the Obstacle Score, we ensure the IRMS rises proportionally with detection uncertainty, alerting the operator to investigate even when the model isn't fully sure.
+Because a low-confidence detection is itself a safety risk. If the YOLO model is 70% confident that the object ahead is a person, that means it's 30% uncertain — in a life-safety context, 30% uncertainty is unacceptably high, and the system must treat it as if the person is definitely there. By incorporating confidence into the Obstacle Score, we ensure the IASI rises proportionally with detection uncertainty, alerting the operator to investigate even when the model isn't fully sure.
 
 ---
 
@@ -594,7 +594,7 @@ Because a low-confidence detection is itself a safety risk. If the YOLO model is
 Three improvements in priority order:
 1. **Replace simulated data with real MPU6050 readings** — the code structure already supports this; it's a hardware assembly task, not a software redesign
 2. **Add WebSocket real-time push** — replace the 2-second polling interval with a WebSocket connection so the dashboard updates within 100ms of new data arriving, removing the last significant latency
-3. **Add per-GPS-coordinate health mapping** — attach a GPS module to the Pi and tag every reading with a coordinate. This allows plotting track health on a geographic map of the Indian rail network, so engineers can identify specific kilometre-posts that consistently show elevated IRMS
+3. **Add per-GPS-coordinate health mapping** — attach a GPS module to the Pi and tag every reading with a coordinate. This allows plotting track health on a geographic map of the Indian rail network, so engineers can identify specific kilometre-posts that consistently show elevated IASI
 
 ---
 
@@ -611,14 +611,14 @@ Indian Railways reported **17,000+ track defects** found during manual inspectio
 ---
 
 **PROJECT**
-> GuardRail Central — IIOT Integrated Edge-AI Based Railway Track Health Monitoring and Supervision System
+> AXON — IIOT Integrated Edge-AI Based Railway Track Health Monitoring and Supervision System
 > Subject 22EEE65 | New Horizon College of Engineering, Bengaluru | AY 2025-26
 > Team: G Sai Sugeet · John Benny J · Neetha Udupa G · S D Mukhesh
 
 ---
 
-**IRMS FORMULA**
-> IRMS = (Vibration Score × 0.50) + (Obstacle Score × 0.35) + (Communication Score × 0.15)
+**IASI FORMULA**
+> IASI = (Vibration Score × 0.50) + (Obstacle Score × 0.35) + (Communication Score × 0.15)
 
 ---
 
@@ -633,9 +633,9 @@ Indian Railways reported **17,000+ track defects** found during manual inspectio
 
 ---
 
-**5 SCENARIOS AND IRMS RANGES**
+**5 SCENARIOS AND IASI RANGES**
 
-| Scenario | IRMS Range | Fault Type |
+| Scenario | IASI Range | Fault Type |
 |---|---|---|
 | NORMAL | 5–18 | No fault |
 | JOINT FAULT | 22–38 | Loose rail joint, rhythmic impact |
@@ -678,4 +678,4 @@ Indian Railways reported **17,000+ track defects** found during manual inspectio
 ---
 
 **WHAT TO SAY IN ONE BREATH:**
-> "GuardRail Central is a real-time railway track health dashboard. We mount a Raspberry Pi and camera on each train — the Pi reads vibration and detects obstacles. An Android phone bridges the data to our ML server, which runs Isolation Forest to score vibration anomalies and Random Forest to classify risk. The IRMS score — a weighted composite of vibration, obstacle, and communication health — updates every second on our Vercel dashboard. Phase 1 is a verified simulation of this pipeline; Phase 2 connects the real hardware."
+> "AXON is a real-time railway track health dashboard. We mount a Raspberry Pi and camera on each train — the Pi reads vibration and detects obstacles. An Android phone bridges the data to our ML server, which runs Isolation Forest to score vibration anomalies and Random Forest to classify risk. The IASI score — a weighted composite of vibration, obstacle, and communication health — updates every second on our Vercel dashboard. Phase 1 is a verified simulation of this pipeline; Phase 2 connects the real hardware."
