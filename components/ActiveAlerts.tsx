@@ -5,44 +5,43 @@ import type { RiskClass } from '@/types'
 
 interface Props { riskClass: RiskClass }
 
-export default function RiskBadge({ riskClass }: Props) {
+export default function ActiveAlerts({ riskClass }: Props) {
+  const isCritical = riskClass === 'CRITICAL'
+
   return (
     <div style={{
-      background: 'var(--ir-surface)',
-      border: '1px solid var(--ir-border)',
-      boxShadow: 'var(--ir-shadow-md)',
-      padding: 18,
+      background: 'var(--axon-surface)',
+      border: '1px solid var(--axon-border)',
+      padding: 16,
       display: 'flex', flexDirection: 'column',
+      height: '100%',
+      minHeight: 0,
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 12, letterSpacing: 3, color: 'var(--ir-text-muted)' }}>
-          RISK CLASSIFICATION
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-inter)', fontWeight: 600, fontSize: 11, letterSpacing: 2.5, color: 'var(--axon-text-secondary)' }}>
+          ACTIVE ALERTS
         </div>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9.5,
-          letterSpacing: 1.5, color: 'var(--ir-text-dim)',
-          padding: '3px 7px',
-          background: 'var(--ir-surface-2)',
-          border: '1px solid var(--ir-border)',
+          fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: 1.5, color: 'var(--axon-text-dim)',
+          padding: '2px 6px', background: 'var(--axon-surface-2)', border: '1px solid var(--axon-border)',
         }}>
           AUTO-GRADE
         </div>
       </div>
 
       <div
-        className={`badge-${riskClass.toLowerCase()}`}
+        className={`badge-${riskClass.toLowerCase()} ${isCritical ? 'critical-pulse-card' : ''}`}
         style={{
-          flex: 1,
+          flex: 1, minHeight: 0,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          padding: 18,
+          padding: 14,
           position: 'relative',
           textAlign: 'center',
           border: '1px solid',
           transition: 'all .3s',
         }}
       >
-        {/* Corners */}
         {[
           { top: 6, left: 6, borderRight: 'none', borderBottom: 'none' },
           { top: 6, right: 6, borderLeft: 'none', borderBottom: 'none' },
@@ -51,7 +50,7 @@ export default function RiskBadge({ riskClass }: Props) {
         ].map((style, i) => (
           <span key={i} style={{
             position: 'absolute',
-            width: 14, height: 14,
+            width: 12, height: 12,
             border: '2px solid currentColor',
             opacity: 0.5,
             ...style,
@@ -59,15 +58,15 @@ export default function RiskBadge({ riskClass }: Props) {
         ))}
 
         <div style={{
-          fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 700, fontSize: 48,
-          letterSpacing: 6, lineHeight: 1,
+          fontFamily: 'var(--font-mono)',
+          fontWeight: 700, fontSize: 38,
+          letterSpacing: 4, lineHeight: 1,
         }}>{riskClass}</div>
         <div style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 11, letterSpacing: 2,
-          marginTop: 14, opacity: 0.7,
-        }}>IRMS · {RISK_RANGES[riskClass]}</div>
+          fontSize: 10.5, letterSpacing: 2,
+          marginTop: 12, opacity: 0.75,
+        }}>IASI · {RISK_RANGES[riskClass]}</div>
       </div>
     </div>
   )

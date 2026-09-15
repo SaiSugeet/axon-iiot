@@ -3,78 +3,72 @@
 @tailwind utilities;
 
 :root {
-  /* Base */
-  --ir-bg:         #F4F6F9;
-  --ir-navy:       #F4F6F9;
-  --ir-surface:    #FFFFFF;
-  --ir-surface-2:  #EEF2F7;
-  --ir-surface-3:  #E3EAF4;
-
-  /* Indian Railways Brand */
-  --ir-blue:       #1A4F8A;
-  --ir-blue-mid:   #2E75C3;
-  --ir-blue-light: #2E75C3;
-  --ir-blue-deep:  #153F6E;
-  --ir-blue-tint:  #EBF3FC;
-
-  /* Accent */
-  --ir-orange:       #D4500A;
-  --ir-orange-light: #E06020;
-
-  /* Status Colors */
-  --ir-safe:         #1B7A3E;
-  --ir-safe-bg:      #EBF7F0;
-  --ir-monitor:      #B8860B;
-  --ir-monitor-bg:   #FEF9E7;
-  --ir-alert:        #C05A00;
-  --ir-alert-bg:     #FDF0E8;
-  --ir-critical:     #A51C1C;
-  --ir-critical-bg:  #FDEBEB;
-
-  /* Typography */
-  --ir-text:           #1A1F2E;
-  --ir-text-secondary: #4A5568;
-  --ir-text-muted:     #4A5568;
-  --ir-text-dim:       #8A96A8;
+  /* Base surfaces */
+  --axon-bg:          #0A0E14;
+  --axon-surface:     #10161F;
+  --axon-surface-2:   #161D29;
+  --axon-surface-3:   #1C2432;
 
   /* Borders */
-  --ir-border:       #D1D9E6;
-  --ir-border-light: #E8ECF2;
-  --ir-border-soft:  #E8ECF2;
-  --ir-border-blue:  #B8D0EC;
+  --axon-border:        #232B3A;
+  --axon-border-strong: #313C52;
 
-  /* Shadows */
-  --ir-shadow-sm: 0 1px 3px rgba(26,79,138,0.08);
-  --ir-shadow-md: 0 4px 12px rgba(26,79,138,0.10);
-  --ir-shadow-lg: 0 8px 24px rgba(26,79,138,0.12);
+  /* Brand accent — electric cyan (primary signal/data color) */
+  --axon-accent:      #06B6D4;
+  --axon-accent-dim:  rgba(6,182,212,0.14);
+  --axon-accent-glow: rgba(6,182,212,0.35);
+
+  /* Text */
+  --axon-text:           #E7ECF3;
+  --axon-text-secondary: #A7B0C0;
+  --axon-text-dim:       #6B7688;
+  --axon-text-faint:     #4B5566;
+
+  /* Status colors */
+  --axon-safe:        #22C55E;
+  --axon-safe-bg:      rgba(34,197,94,0.12);
+  --axon-monitor:     #F59E0B;
+  --axon-monitor-bg:   rgba(245,158,11,0.12);
+  --axon-alert:       #F97316;
+  --axon-alert-bg:     rgba(249,115,22,0.12);
+  --axon-critical:    #EF4444;
+  --axon-critical-bg:  rgba(239,68,68,0.14);
 }
 
 * { box-sizing: border-box; word-break: break-word; overflow-wrap: anywhere; }
 
 html, body {
   margin: 0; padding: 0;
-  background: var(--ir-bg);
-  color: var(--ir-text);
-  font-family: var(--font-rajdhani), 'Inter', sans-serif;
+  background-color: var(--axon-bg);
+  color: var(--axon-text);
+  font-family: var(--font-inter), 'Inter', sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+body {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.014) 0px, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 3px);
+  background-size: 48px 48px, 48px 48px, 100% 3px;
+  background-attachment: fixed, fixed, fixed;
 }
 
 button { font-family: inherit; cursor: pointer; }
 input  { font-family: inherit; }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--ir-surface-2); }
-::-webkit-scrollbar-thumb { background: var(--ir-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--ir-blue-mid); }
+::-webkit-scrollbar-track { background: var(--axon-surface); }
+::-webkit-scrollbar-thumb { background: var(--axon-border-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--axon-accent); }
 
-/* ── Animations ── */
+/* ── Animations (purposeful only — driven by real state changes) ── */
 @keyframes pulseDot {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.45; }
+  50%       { opacity: 0.35; }
 }
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -85,52 +79,47 @@ input  { font-family: inherit; }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes rowFlash {
-  0%   { background: var(--ir-monitor-bg); }
+  0%   { background: rgba(245,158,11,0.16); }
   100% { background: transparent; }
+}
+@keyframes criticalPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.45); border-color: rgba(239,68,68,0.55); }
+  50%       { box-shadow: 0 0 0 6px rgba(239,68,68,0); border-color: rgba(239,68,68,0.9); }
 }
 
 .dash-fade   { animation: fadeIn .4s ease both; }
-.section-in  { animation: sectionIn .5s ease both; }
+.section-in  { animation: sectionIn .4s ease both; }
 .row-flash   { animation: rowFlash 1.4s ease-out; }
+.critical-pulse-card { animation: criticalPulse 1.6s ease-in-out infinite; }
 
-/* ── Diagonal pattern (login left panel) ── */
-.diagonal-bg {
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    135deg,
-    transparent,
-    transparent 20px,
-    rgba(255,255,255,0.05) 20px,
-    rgba(255,255,255,0.05) 21px
-  );
-  pointer-events: none;
-}
-
-/* ── Live dot ── */
+/* ── Live / status dots ── */
 .live-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #34D399;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--axon-safe);
   display: inline-block;
   animation: pulseDot 2s ease-in-out infinite;
 }
-
-/* ── Status dot (device cards) ── */
 .status-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--ir-safe);
-  display: inline-block;
+  background: var(--axon-safe);
+  display: inline-block; flex-shrink: 0;
   animation: pulseDot 2s ease-in-out infinite;
 }
+.status-dot-offline {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--axon-critical);
+  display: inline-block; flex-shrink: 0;
+  animation: pulseDot 1s ease-in-out infinite;
+}
 
-/* ── Classification badge states ── */
-.badge-safe     { background: var(--ir-safe-bg);     border-color: rgba(27,122,62,0.30);  color: var(--ir-safe);     }
-.badge-monitor  { background: var(--ir-monitor-bg);  border-color: rgba(184,134,11,0.30); color: var(--ir-monitor);  }
-.badge-alert    { background: var(--ir-alert-bg);    border-color: rgba(192,90,0,0.30);   color: var(--ir-alert);    }
-.badge-critical { background: var(--ir-critical-bg); border-color: rgba(165,28,28,0.30);  color: var(--ir-critical); }
+/* ── Classification badges (dark) ── */
+.badge-safe     { background: var(--axon-safe-bg);     border-color: rgba(34,197,94,0.35);  color: var(--axon-safe);     }
+.badge-monitor  { background: var(--axon-monitor-bg);  border-color: rgba(245,158,11,0.35); color: var(--axon-monitor);  }
+.badge-alert    { background: var(--axon-alert-bg);    border-color: rgba(249,115,22,0.35); color: var(--axon-alert);    }
+.badge-critical { background: var(--axon-critical-bg); border-color: rgba(239,68,68,0.40);  color: var(--axon-critical); }
 
-/* ── Scenario button active states ── */
-.sc-btn-active-blue   { background: var(--ir-blue) !important;     color: white !important; border-color: var(--ir-blue) !important; }
-.sc-btn-active-yellow { background: var(--ir-monitor) !important;  color: white !important; border-color: var(--ir-monitor) !important; }
-.sc-btn-active-orange { background: var(--ir-alert) !important;    color: white !important; border-color: var(--ir-alert) !important; }
-.sc-btn-active-red    { background: var(--ir-critical) !important; color: white !important; border-color: var(--ir-critical) !important; }
+/* ── Scenario selector-switch active states ── */
+.sw-active-blue   { background: rgba(6,182,212,0.14) !important;   border-color: var(--axon-accent) !important;   color: var(--axon-accent) !important; }
+.sw-active-yellow { background: rgba(245,158,11,0.14) !important;  border-color: var(--axon-monitor) !important;  color: var(--axon-monitor) !important; }
+.sw-active-orange { background: rgba(249,115,22,0.14) !important;  border-color: var(--axon-alert) !important;    color: var(--axon-alert) !important; }
+.sw-active-red    { background: rgba(239,68,68,0.16) !important;   border-color: var(--axon-critical) !important; color: var(--axon-critical) !important; }

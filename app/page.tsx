@@ -10,18 +10,18 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true)
-    const saved = localStorage.getItem('gr_operator')
+    const saved = localStorage.getItem('axon_operator')
     if (saved) setOperator(saved)
   }, [])
 
   const handleAuth = (username: string) => {
     setOperator(username)
-    localStorage.setItem('gr_operator', username)
+    localStorage.setItem('axon_operator', username)
   }
 
   const handleLogout = () => {
     setOperator(null)
-    localStorage.removeItem('gr_operator')
+    localStorage.removeItem('axon_operator')
   }
 
   if (!mounted) return null

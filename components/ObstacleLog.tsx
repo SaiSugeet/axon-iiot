@@ -11,22 +11,20 @@ function fmtTime(d: Date): string {
 }
 
 const CLS_COLOR: Record<string, string> = {
-  CLEAR:  'var(--ir-text-dim)',
-  CATTLE: 'var(--ir-monitor)',
-  PERSON: 'var(--ir-critical)',
-  DEBRIS: 'var(--ir-alert)',
+  CLEAR:  'var(--axon-text-dim)',
+  CATTLE: 'var(--axon-monitor)',
+  PERSON: 'var(--axon-critical)',
+  DEBRIS: 'var(--axon-alert)',
 }
-
 const CLS_ROW_BG: Record<string, string> = {
-  CATTLE: 'var(--ir-monitor-bg)',
-  PERSON: 'var(--ir-critical-bg)',
-  DEBRIS: 'var(--ir-alert-bg)',
+  CATTLE: 'var(--axon-monitor-bg)',
+  PERSON: 'var(--axon-critical-bg)',
+  DEBRIS: 'var(--axon-alert-bg)',
 }
-
 const CLS_BORDER: Record<string, string> = {
-  CATTLE: 'var(--ir-monitor)',
-  PERSON: 'var(--ir-critical)',
-  DEBRIS: 'var(--ir-alert)',
+  CATTLE: 'var(--axon-monitor)',
+  PERSON: 'var(--axon-critical)',
+  DEBRIS: 'var(--axon-alert)',
 }
 
 export default function ObstacleLog({ log }: Props) {
@@ -45,40 +43,37 @@ export default function ObstacleLog({ log }: Props) {
 
   return (
     <div style={{
-      background: 'var(--ir-surface)',
-      border: '1px solid var(--ir-border)',
-      boxShadow: 'var(--ir-shadow-sm)',
-      padding: 18,
+      background: 'var(--axon-surface)',
+      border: '1px solid var(--axon-border)',
+      padding: 16,
       display: 'flex', flexDirection: 'column',
+      height: '100%', minHeight: 0,
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 12, letterSpacing: 3, color: 'var(--ir-text-muted)' }}>
-          OBSTACLE DETECTION LOG
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-inter)', fontWeight: 600, fontSize: 11, letterSpacing: 2.5, color: 'var(--axon-text-secondary)' }}>
+          OBSTACLE DETECTION EVENTS
         </div>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9.5,
-          letterSpacing: 1.5, color: 'var(--ir-text-dim)',
-          padding: '3px 7px',
-          background: 'var(--ir-surface-2)',
-          border: '1px solid var(--ir-border)',
+          fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: 1.5, color: 'var(--axon-text-dim)',
+          padding: '2px 6px', background: 'var(--axon-surface-2)', border: '1px solid var(--axon-border)',
         }}>
           YOLO-NANO · EDGE
         </div>
       </div>
 
-      <div style={{ maxHeight: 280, overflowY: 'auto' }}>
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: 11 }}>
           <thead>
-            <tr style={{ background: 'var(--ir-surface-3)' }}>
+            <tr style={{ background: 'var(--axon-surface-3)', position: 'sticky', top: 0 }}>
               {['TIME', 'CLASS', 'CONFIDENCE', 'STATUS'].map((h, i) => (
                 <th key={h} style={{
                   textAlign: 'left', fontWeight: 600,
-                  letterSpacing: 2, color: 'var(--ir-text-secondary)',
-                  padding: '8px 10px',
-                  borderBottom: '1px solid var(--ir-border)',
+                  letterSpacing: 2, color: 'var(--axon-text-secondary)',
+                  padding: '7px 10px',
+                  borderBottom: '1px solid var(--axon-border)',
                   fontSize: 9.5,
-                  fontFamily: 'var(--font-rajdhani)',
-                  width: i === 0 ? 90 : i === 3 ? 80 : undefined,
+                  fontFamily: 'var(--font-inter)',
+                  width: i === 0 ? 80 : i === 3 ? 70 : undefined,
                 }}>{h}</th>
               ))}
             </tr>
@@ -87,61 +82,50 @@ export default function ObstacleLog({ log }: Props) {
             {log.map((row, i) => {
               const isEvent = row.obstacleClass !== 'CLEAR'
               const confPct = (row.confidence * 100).toFixed(1)
-              const confBarColor = isEvent ? CLS_BORDER[row.obstacleClass] ?? 'var(--ir-alert)' : 'var(--ir-blue-mid)'
-              const rowBg = isEvent ? CLS_ROW_BG[row.obstacleClass] ?? 'var(--ir-alert-bg)' : 'transparent'
-              const rowBorderLeft = isEvent ? `3px solid ${CLS_BORDER[row.obstacleClass] ?? 'var(--ir-alert)'}` : '3px solid transparent'
+              const confBarColor = isEvent ? CLS_BORDER[row.obstacleClass] ?? 'var(--axon-alert)' : 'var(--axon-accent)'
+              const rowBg = isEvent ? CLS_ROW_BG[row.obstacleClass] ?? 'var(--axon-alert-bg)' : 'transparent'
+              const rowBorderLeft = isEvent ? `3px solid ${CLS_BORDER[row.obstacleClass] ?? 'var(--axon-alert)'}` : '3px solid transparent'
 
               return (
                 <tr
                   key={row.id}
                   ref={i === 0 ? flashRef : undefined}
-                  style={{
-                    background: rowBg,
-                    borderLeft: rowBorderLeft,
-                  }}
+                  style={{ background: rowBg, borderLeft: rowBorderLeft }}
                 >
                   <td style={{
-                    padding: '9px 10px',
-                    borderBottom: '1px solid var(--ir-border-light)',
-                    color: 'var(--ir-text-dim)',
-                    fontFamily: 'var(--font-mono)',
-                  }}>
-                    {fmtTime(row.timestamp)}
-                  </td>
-                  <td style={{ padding: '9px 10px', borderBottom: '1px solid var(--ir-border-light)' }}>
+                    padding: '8px 10px',
+                    borderBottom: '1px solid var(--axon-border)',
+                    color: 'var(--axon-text-dim)',
+                  }}>{fmtTime(row.timestamp)}</td>
+                  <td style={{ padding: '8px 10px', borderBottom: '1px solid var(--axon-border)' }}>
                     <span style={{
-                      display: 'inline-block',
-                      padding: '2px 7px',
+                      display: 'inline-block', padding: '2px 7px',
                       fontSize: 10, letterSpacing: 1.5,
                       fontWeight: isEvent ? 600 : 400,
                       color: CLS_COLOR[row.obstacleClass],
                     }}>{row.obstacleClass}</span>
                   </td>
-                  <td style={{ padding: '9px 10px', borderBottom: '1px solid var(--ir-border-light)' }}>
+                  <td style={{ padding: '8px 10px', borderBottom: '1px solid var(--axon-border)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{
                         flex: 1, height: 4,
-                        background: 'var(--ir-surface-2)',
-                        position: 'relative',
-                        minWidth: 60, maxWidth: 90,
+                        background: 'var(--axon-surface-2)',
+                        position: 'relative', minWidth: 50, maxWidth: 80,
                       }}>
                         <div style={{
                           position: 'absolute', left: 0, top: 0, bottom: 0,
-                          width: confPct + '%',
-                          background: confBarColor,
+                          width: confPct + '%', background: confBarColor,
                         }} />
                       </div>
-                      <span style={{ color: 'var(--ir-text-dim)', fontSize: 10 }}>{confPct}%</span>
+                      <span style={{ color: 'var(--axon-text-dim)', fontSize: 10 }}>{confPct}%</span>
                     </div>
                   </td>
                   <td style={{
-                    padding: '9px 10px',
-                    borderBottom: '1px solid var(--ir-border-light)',
-                    color: isEvent ? CLS_BORDER[row.obstacleClass] ?? 'var(--ir-alert)' : 'var(--ir-text-dim)',
+                    padding: '8px 10px',
+                    borderBottom: '1px solid var(--axon-border)',
+                    color: isEvent ? CLS_BORDER[row.obstacleClass] ?? 'var(--axon-alert)' : 'var(--axon-text-dim)',
                     fontWeight: isEvent ? 600 : 400,
-                  }}>
-                    {isEvent ? 'FLAG' : 'OK'}
-                  </td>
+                  }}>{isEvent ? 'FLAG' : 'OK'}</td>
                 </tr>
               )
             })}

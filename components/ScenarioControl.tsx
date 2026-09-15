@@ -8,113 +8,56 @@ interface Props {
   setScenario: (s: ScenarioKey) => void
 }
 
-const TONE_INACTIVE: Record<string, React.CSSProperties> = {
-  blue:   { borderColor: 'var(--ir-blue)',     color: 'var(--ir-blue)'     },
-  yellow: { borderColor: 'var(--ir-monitor)',  color: 'var(--ir-monitor)'  },
-  orange: { borderColor: 'var(--ir-alert)',    color: 'var(--ir-alert)'    },
-  red:    { borderColor: 'var(--ir-critical)', color: 'var(--ir-critical)' },
+const ACTIVE_CLASS: Record<string, string> = {
+  blue:   'sw-active-blue',
+  yellow: 'sw-active-yellow',
+  orange: 'sw-active-orange',
+  red:    'sw-active-red',
 }
 
 export default function ScenarioControl({ scenario, setScenario }: Props) {
   return (
-    <div className="section-in scenario-root" style={{
-      background: 'var(--ir-surface)',
-      border: '1px solid var(--ir-border)',
-      boxShadow: 'var(--ir-shadow-sm)',
-      padding: '14px 18px',
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
-      gap: 18,
-      alignItems: 'center',
-    }}>
-      {/* Title */}
+    <div>
       <div style={{
-        fontFamily: 'var(--font-rajdhani)',
-        fontWeight: 600, fontSize: 12,
-        letterSpacing: 3, color: 'var(--ir-text-muted)',
-        display: 'flex', alignItems: 'center', gap: 10,
-      }}>
-        <span style={{ width: 16, height: 2, background: 'var(--ir-orange)', display: 'block' }} />
-        TRACK SCENARIO CONTROL
-      </div>
+        fontFamily: 'var(--font-inter)', fontWeight: 600, fontSize: 9.5,
+        letterSpacing: 2, color: 'var(--axon-text-dim)', marginBottom: 8,
+      }}>TRACK SCENARIO CONTROL</div>
 
-      {/* Buttons */}
-      <div className="scenario-buttons" style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {SCENARIO_ORDER.map(key => {
           const s = SCENARIOS[key]
           const isActive = scenario === key
-          let activeClass = ''
-          if (isActive) {
-            if (s.color === 'blue')   activeClass = 'sc-btn-active-blue'
-            if (s.color === 'yellow') activeClass = 'sc-btn-active-yellow'
-            if (s.color === 'orange') activeClass = 'sc-btn-active-orange'
-            if (s.color === 'red')    activeClass = 'sc-btn-active-red'
-          }
           return (
             <button
               key={key}
-              className={activeClass}
+              className={isActive ? ACTIVE_CLASS[s.color] : ''}
               onClick={() => setScenario(key)}
               style={{
-                background: 'transparent',
-                border: '1px solid var(--ir-border)',
-                padding: '9px 16px',
-                fontFamily: 'var(--font-rajdhani)',
-                fontWeight: 600, fontSize: 12,
-                letterSpacing: 2,
-                whiteSpace: 'nowrap',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: 'var(--axon-surface-2)',
+                border: '1px solid var(--axon-border)',
+                padding: '9px 12px',
+                fontFamily: 'var(--font-inter)',
+                fontWeight: 600, fontSize: 10.5,
+                letterSpacing: 1.5,
                 cursor: 'pointer',
-                transition: 'all .2s',
-                color: 'var(--ir-text-muted)',
-                ...(!isActive ? TONE_INACTIVE[s.color] : {}),
+                transition: 'all .18s',
+                color: 'var(--axon-text-secondary)',
+                width: '100%',
               }}
             >
-              {s.label}
+              <span>{s.label}</span>
+              <span style={{
+                width: 7, height: 7, borderRadius: '50%',
+                background: isActive ? 'currentColor' : 'var(--axon-border-strong)',
+                boxShadow: isActive ? '0 0 6px currentColor' : 'none',
+                flexShrink: 0,
+                transition: 'all .18s',
+              }} />
             </button>
           )
         })}
       </div>
-
-      {/* Active label */}
-      <div className="scenario-active" style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2,
-        borderLeft: '1px solid var(--ir-border)',
-        paddingLeft: 18,
-      }}>
-        <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9.5,
-          letterSpacing: 2, color: 'var(--ir-text-dim)',
-        }}>ACTIVE SCENARIO</div>
-        <div style={{
-          fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 700, fontSize: 18,
-          letterSpacing: 3, color: 'var(--ir-blue)',
-        }}>{SCENARIOS[scenario].label}</div>
-      </div>
-
-      <style>{`
-        @media (max-width: 767px) {
-          .scenario-root {
-            grid-template-columns: 1fr !important;
-            gap: 10px !important;
-            padding: 12px !important;
-          }
-          .scenario-buttons {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 8px !important;
-            overflow-x: visible !important;
-          }
-          .scenario-buttons button { padding: 8px 10px !important; font-size: 11px !important; }
-          .scenario-active {
-            border-left: none !important;
-            padding-left: 0 !important;
-            border-top: 1px solid var(--ir-border-soft) !important;
-            padding-top: 8px !important;
-            align-items: flex-start !important;
-          }
-        }
-      `}</style>
     </div>
   )
 }

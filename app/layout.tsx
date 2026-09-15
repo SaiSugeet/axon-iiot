@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Rajdhani, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
-const rajdhani = Rajdhani({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-rajdhani',
+  variable: '--font-inter',
 })
 
 const jetbrainsMono = JetBrains_Mono({
@@ -18,16 +18,17 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
+  themeColor: '#0A0E14',
 }
 
 export const metadata: Metadata = {
-  title: 'GuardRail Central | IR Track Monitor',
-  description: 'IIOT Integrated Edge-AI Railway Track Health Monitoring System',
+  title: 'AXON — Infrastructure Anomaly Detection',
+  description: 'Adaptive eXtended-bridge Operational Network — real-time infrastructure anomaly detection for transportation systems.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${rajdhani.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   )

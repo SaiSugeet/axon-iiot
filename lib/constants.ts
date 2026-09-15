@@ -1,12 +1,13 @@
 import type { Scenario, ScenarioKey, RiskClass } from '@/types'
 
-export const APP_NAME = 'GuardRail Central'
-export const APP_SHORT = 'GR'
-export const APP_TAGLINE = 'IRMS · EDGE-AI · TRACK HEALTH MONITOR'
+export const APP_NAME = 'AXON'
+export const APP_TAGLINE = 'Adaptive eXtended-bridge Operational Network'
+export const APP_SUBTITLE = 'Infrastructure Anomaly Detection System — Restricted Access'
+export const APP_FOOTER = 'AXON v2.0 | Phase 1 Simulation | New Horizon College of Engineering'
 
 export const AUTH_CREDENTIALS = {
-  username: 'SaiSugeet',
-  password: '12345',
+  username: 'axon_admin',
+  password: 'EdgeAI@2025',
 }
 
 export const SCENARIOS: Record<ScenarioKey, Scenario> = {
@@ -61,17 +62,17 @@ export const SCENARIO_ORDER: ScenarioKey[] = [
 ]
 
 export const RISK_COLORS: Record<RiskClass, string> = {
-  SAFE:     '#1B7A3E',
-  MONITOR:  '#B8860B',
-  ALERT:    '#C05A00',
-  CRITICAL: '#A51C1C',
+  SAFE:     '#22C55E',
+  MONITOR:  '#F59E0B',
+  ALERT:    '#F97316',
+  CRITICAL: '#EF4444',
 }
 
 export const RISK_RANGES: Record<RiskClass, string> = {
-  SAFE:     '00 — 25',
-  MONITOR:  '26 — 50',
-  ALERT:    '51 — 75',
-  CRITICAL: '76 — 99',
+  SAFE:     '000 — 025',
+  MONITOR:  '026 — 050',
+  ALERT:    '051 — 075',
+  CRITICAL: '076 — 100',
 }
 
 export const OBSTACLE_WEIGHTS: Record<ScenarioKey, Record<string, number>> = {
@@ -80,4 +81,12 @@ export const OBSTACLE_WEIGHTS: Record<ScenarioKey, Record<string, number>> = {
   LOOSE_FASTENER: { CLEAR: 0.90, CATTLE: 0.03, PERSON: 0.02, DEBRIS: 0.05 },
   RAIL_CRACK:     { CLEAR: 0.80, CATTLE: 0.08, PERSON: 0.05, DEBRIS: 0.07 },
   SEVERE_DAMAGE:  { CLEAR: 0.60, CATTLE: 0.15, PERSON: 0.15, DEBRIS: 0.10 },
+}
+
+/* Scenario accent color token -> hex, shared across sidebar/dial components */
+export const SCENARIO_COLOR_HEX: Record<Scenario['color'], string> = {
+  blue:   '#06B6D4',
+  yellow: '#F59E0B',
+  orange: '#F97316',
+  red:    '#EF4444',
 }
