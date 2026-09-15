@@ -139,7 +139,7 @@ A railway safety monitoring dashboard is classified as **critical infrastructure
 
 ### What "Authorized Personnel Only" Means
 
-In the real system, only certified Railway Safety Division operators would have credentials. They would authenticate with their employee ID and a rotating OTP, and every login would be logged with timestamp and IP for audit. In Phase 1, we demonstrate this with a hardcoded credential pair (`axon_admin` / `EdgeAI@2025`).
+In the real system, only certified Railway Safety Division operators would have credentials. They would authenticate with their employee ID and a rotating OTP, and every login would be logged with timestamp and IP for audit. In Phase 1, we demonstrate this with a hardcoded credential pair (`SaiSugeet` / `2004`).
 
 ### Authentication Flow
 

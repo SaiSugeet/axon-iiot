@@ -1,6 +1,6 @@
 # AXON
 
-*IRMS · EDGE-AI · TRACK HEALTH MONITOR*
+*IASI · EDGE-AI · INFRASTRUCTURE ANOMALY DETECTION*
 
 ![Phase](https://img.shields.io/badge/Phase-1%20Prototype-blue?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Live%20on%20Vercel-brightgreen?style=flat-square)
@@ -8,7 +8,9 @@
 ![Styling](https://img.shields.io/badge/Styling-Tailwind%20CSS-38bdf8?style=flat-square&logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-AXON (Adaptive eXtended-bridge Operational Network) — A three-layer Edge-AI IIoT framework for real-time infrastructure anomaly detection in transportation systems. Edge Node (Pi Zero 2W) → Android Termux Bridge → Central Server → Live Dashboard.
+**AXON (Adaptive eXtended-bridge Operational Network)** — A three-layer Edge-AI IIoT framework for real-time infrastructure anomaly detection in transportation systems.
+
+Edge Node (Pi Zero 2W) → Android Termux Bridge → Central Server → Live Dashboard
 
 ---
 
@@ -16,22 +18,20 @@ AXON (Adaptive eXtended-bridge Operational Network) — A three-layer Edge-AI II
 
 > **This is a Phase 1 simulation prototype.**
 >
-> - All sensor data (vibration, obstacle detection, IRMS scores) is **synthetically generated in the browser**
+> - All sensor data (vibration, obstacle detection, IASI scores) is **synthetically generated in the browser**
 > - No physical hardware is connected in this phase
-> - The full system (Raspberry Pi Zero 2W + Android Bridge + Ubuntu Server) will be integrated in Phase 2
-> - This prototype demonstrates the complete dashboard UI, data visualization, and IRMS scoring logic
+> - The full system (Raspberry Pi Zero 2W + Android Termux Bridge + Ubuntu Server) will be integrated in Phase 2
+> - This prototype demonstrates the complete dashboard UI, data visualization, and IASI scoring pipeline
 
 ---
 
 ## 🚆 Project Overview
 
-Indian Railways operates over 67,000 km of track across the country. Manual track inspection is conducted only once every 3–6 months, leaving a significant window during which cracks, joint failures, loose fasteners, and other structural faults go undetected — posing serious risks to passenger safety and infrastructure.
+Transportation infrastructure — railway tracks, urban roads, industrial pathways — degrades continuously between inspection cycles. Manual railway track inspection is conducted only once every 3–6 months, leaving a significant window during which cracks, joint failures, loose fasteners, and other structural faults go undetected.
 
-AXON is the dashboard layer of an onboard edge-AI system designed to monitor track health on every train run. By mounting a vibration sensor (MPU6050) and a small AI module on the train, the system continuously analyses track conditions in real time — detecting anomalies, classifying faults, and surfacing hazards to a central safety operations console.
+AXON is a domain-agnostic edge-AI IIoT framework that monitors infrastructure health on every vehicle run. A low-cost edge node (Raspberry Pi Zero 2W + MPU6050 vibration sensor) captures structural signals continuously. Data travels through a resilient Android Termux MQTT bridge — with local SQLite offline buffering — to a central server running FFT analysis, Isolation Forest anomaly detection, and Random Forest severity classification.
 
-At the core of the system is the **IRMS (Infrastructure Risk Monitoring Score)** — a single 0–100 composite score that combines vibration health, obstacle detection confidence, and communication reliability into one actionable metric. Operators can respond to track degradation before it becomes a failure.
-
-This Phase 1 prototype delivers the complete visualisation layer: the IRMS gauge, risk classification logic, FFT vibration spectrum, obstacle detection log, and all five track fault scenarios — all driven by synthetic data that faithfully mimics real sensor output.
+At the core of the system is the **IASI (Infrastructure Anomaly Severity Index)** — a generic two-component composite score that quantifies infrastructure risk in real time. The same architecture applies to railway track monitoring, urban road quality assessment, and fleet vehicle health monitoring.
 
 ---
 
@@ -39,60 +39,60 @@ This Phase 1 prototype delivers the complete visualisation layer: the IRMS gauge
 
 | Layer | Component | Role |
 |-------|-----------|------|
-| Layer 1 | Raspberry Pi Zero 2W | Edge device — collects MPU6050 vibration and camera data onboard the train |
-| Layer 2 | Android Phone (Termux) | MQTT bridge — relays data from the Pi, provides 72-hour offline buffer |
-| Layer 3 | Laptop / Ubuntu Server | ML processing — Isolation Forest + Random Forest models, Flask REST API |
-| Layer 4 | Vercel + Render | Dashboard + API hosting — live browser visualisation and operator console |
+| Layer 1 | Raspberry Pi Zero 2W | Edge sensing node — MPU6050 vibration at 500Hz, MQTT publishing |
+| Layer 2 | Android Phone (Termux) | Resilient MQTT bridge — SQLite offline buffer, automatic replay on reconnect |
+| Layer 3 | Laptop / Ubuntu Server | ML processing — FFT, Isolation Forest, Random Forest, IASI engine, Flask REST API |
+| Layer 4 | Vercel + Render | Dashboard + API hosting — live browser visualization and operator console |
 
-> **In this Phase 1 prototype, Layers 1–3 are simulated synthetically inside the browser. The dashboard (Layer 4) is fully functional.**
+> **In this Phase 1 prototype, Layers 1–3 are simulated synthetically inside the browser. Layer 4 (this dashboard) is fully functional and live.**
 
 ---
 
-## 📊 IRMS — Infrastructure Risk Monitoring Score
+## 📊 IASI — Infrastructure Anomaly Severity Index
 
-The IRMS is a composite 0–100 score computed from three weighted sub-scores:
+The IASI is a generic two-component composite score computed as:
 
-```
-IRMS = (Vibration Score × 50) + (Obstacle Score × 35) + (Communication Score × 15)
-```
+IASI = (Vibration Anomaly Score × W1) + (Signal Continuity × W2)
 
-| Classification | IRMS Range | Color |
-|---------------|------------|-------|
-| SAFE | 0 – 25 | 🟢 Green |
-| MONITOR | 26 – 50 | 🟡 Yellow |
-| ALERT | 51 – 75 | 🟠 Orange |
-| CRITICAL | 76 – 100 | 🔴 Red |
 
-An IRMS above 75 triggers a **CRITICAL** alert — operators are directed to halt traffic in the affected section and dispatch a field crew for immediate inspection.
+Where W1 and W2 are domain-specific weights derived via the Analytic Hierarchy Process (AHP). For railway track monitoring: W1 = 0.85, W2 = 0.15.
+
+| Classification | IASI Range | Meaning |
+|---------------|------------|---------|
+| SAFE | 0 – 25 | Normal operating conditions |
+| MONITOR | 26 – 50 | Early degradation detected — increase inspection frequency |
+| ALERT | 51 – 75 | Significant anomaly — schedule maintenance within 48 hours |
+| CRITICAL | 76 – 100 | Severe structural risk — halt traffic, dispatch field crew immediately |
 
 ---
 
 ## 🎮 Simulation Scenarios
 
-The dashboard supports five track fault scenarios that can be switched live, each with realistic IRMS ranges and FFT frequency signatures:
+Five fault severity scenarios with realistic IASI ranges and FFT frequency signatures:
 
-| Scenario | Description | IRMS Range | Classification |
+| Scenario | Description | IASI Range | Classification |
 |----------|-------------|------------|----------------|
-| NORMAL | Healthy track, baseline condition | 5 – 18 | SAFE |
-| JOINT_FAULT | Rail joint loosening, periodic impulse signature | 22 – 38 | MONITOR |
-| LOOSE_FASTENER | Bolt holding rail is loose, localised vertical oscillation | 15 – 30 | MONITOR |
-| RAIL_CRACK | Crack forming in the rail, sub-surface defect signature | 38 – 54 | ALERT |
-| SEVERE_DAMAGE | Major structural failure, multi-band vibration anomalies | 60 – 92 | CRITICAL |
+| NORMAL | Healthy infrastructure, baseline condition | 5 – 18 | SAFE |
+| JOINT_FAULT | Rail joint loosening — periodic impulse signature at 18Hz | 22 – 38 | MONITOR |
+| LOOSE_FASTENER | Loose fastener — localized vertical oscillation at 14Hz | 15 – 30 | MONITOR |
+| RAIL_CRACK | Rail crack forming — sub-surface defect signature at 26Hz | 38 – 54 | ALERT |
+| SEVERE_DAMAGE | Major structural failure — multi-band anomaly at 40Hz + 46Hz | 60 – 92 | CRITICAL |
 
 ---
 
 ## ✨ Dashboard Features
 
-- 🔐 **Operator login** with secure hardcoded credentials and localStorage session persistence
-- 📡 **Live device status cards** — Raspberry Pi Zero 2W, Android MQTT Bridge, Ubuntu Server
-- 🎛️ **Scenario control panel** — switch between 5 track fault conditions in real time
-- 📈 **IRMS Gauge** — animated semicircular SVG dial, 0–100, colour-coded by risk class
-- 🏷️ **Risk Classification Badge** — auto-graded SAFE / MONITOR / ALERT / CRITICAL with pulsing animations
-- 📉 **IRMS Trend Line** — last 60 readings at 1 Hz, live-updating Recharts line chart
-- 📊 **FFT Power Spectrum Chart** — 51 frequency bins (0–50 Hz), updates every 5 seconds
-- 🚧 **Obstacle Detection Log** — real-time YOLO-nano simulation log with per-class confidence bars
-- 🖥️ **System Health Panel** — packet counts, scenario uptime, API response time, model confidence
-- 📱 **Fully responsive** — desktop (1440px), tablet (768px), and mobile (375px)
+- 🔐 **Operator authentication** — secure login with session persistence
+- 📡 **Live device status** — Pi Zero 2W, Android Bridge, Central Server status indicators
+- 🎛️ **Scenario control panel** — switch between 5 fault conditions in real time
+- 📈 **IASI Gauge** — animated semicircular SVG dial, 0–100, color-coded by risk class
+- 🏷️ **Risk Classification Badge** — SAFE / MONITOR / ALERT / CRITICAL with live state
+- 📉 **IASI Trend Line** — last 60 readings at 1Hz, rolling Recharts line chart
+- 📊 **FFT Power Spectrum** — 51 frequency bins (0–50Hz), dominant frequency highlighted
+- 🚧 **Obstacle Detection Log** — event log with class, confidence bars, and status flags
+- 📡 **Signal Continuity Gauge** — Android bridge health indicator
+- 🖥️ **System Telemetry** — Pi packet count, uptime, Android ping, server push latency
+- 🌐 **Responsive layout** — desktop, tablet, and mobile
 
 ---
 
@@ -100,88 +100,77 @@ The dashboard supports five track fault scenarios that can be switched live, eac
 
 | Technology | Purpose |
 |-----------|---------|
-| Next.js 14 | React framework, App Router, static export |
+| Next.js 14 | React framework, App Router |
 | Tailwind CSS | Utility-first styling, responsive layout |
-| Recharts | IRMS trend line and FFT vibration spectrum charts |
+| Recharts | IASI trend line and FFT vibration spectrum charts |
 | Lucide React | SVG icon system |
-| Google Fonts — Rajdhani + JetBrains Mono | Display and monospace typography |
-| Vercel | Hosting and continuous deployment |
+| Google Fonts — Inter + JetBrains Mono | Clean sans-serif + monospace typography |
+| Vercel | Hosting and continuous deployment from GitHub |
 
 ---
 
 ## 🚀 Getting Started
 
-**Prerequisites**
-- Node.js 18+
-- npm or yarn
-
-**Installation**
+**Prerequisites:** Node.js 18+
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/axon-iiot.git
-cd axon-iiot
+git clone https://github.com/SaiSugeet/GuardRail-Central.git
+cd GuardRail-Central
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
 
-**Login credentials (prototype)**
+**Login credentials:**
 
-```
-Username: axon_admin
-Password: EdgeAI@2025
-```
+Operator ID: SaiSugeet
+Access Code: 2004
+
 
 ---
 
-## 📦 Deployment on Vercel
+## 📦 Deploy on Vercel
 
-1. Push this repository to GitHub
-2. Go to [vercel.com](https://vercel.com) and sign in
-3. Click **New Project** → Import your GitHub repository
-4. Vercel auto-detects Next.js — click **Deploy**
-5. Your dashboard goes live at `https://axon-iiot.vercel.app`
-
-> Every future `git push` to the `main` branch automatically redeploys to Vercel.
+1. Push to GitHub
+2. Import repository at [vercel.com](https://vercel.com)
+3. Vercel auto-detects Next.js — click Deploy
+4. Every `git push` to `main` auto-redeploys
 
 ---
 
 ## 📁 Project Structure
 
-```
-axon-iiot/
+axon/
 ├── app/
-│   ├── layout.tsx              # Root layout — Google Fonts, metadata
-│   ├── page.tsx                # Entry point — login gate / dashboard router
-│   └── globals.css             # CSS variables, Tailwind base, animations
+│ ├── layout.tsx # Root layout — fonts, metadata
+│ ├── page.tsx # Entry point — login gate / dashboard router
+│ └── globals.css # CSS variables, Tailwind base, animations
 ├── components/
-│   ├── LoginPage.tsx           # Operator login screen
-│   ├── Dashboard.tsx           # Main dashboard shell
-│   ├── Navbar.tsx              # Top navigation bar
-│   ├── DeviceStatusStrip.tsx   # 3 device status cards
-│   ├── ScenarioControl.tsx     # 5 scenario buttons
-│   ├── IRMSGauge.tsx           # SVG semicircular arc gauge
-│   ├── RiskBadge.tsx           # Risk classification badge
-│   ├── TrackStateIndicator.tsx # Scenario label + animated waveform
-│   ├── IRMSTrendChart.tsx      # Recharts 60-point line chart
-│   ├── FFTSpectrumChart.tsx    # Recharts 51-bin bar chart
-│   ├── ObstacleLog.tsx         # Scrollable detection table
-│   └── SystemHealth.tsx        # System stats panel
+│ ├── LoginPage.tsx # Operator authentication screen
+│ ├── Dashboard.tsx # Main dashboard shell and layout
+│ ├── Navbar.tsx # Top navigation bar
+│ ├── DeviceStatusStrip.tsx # Pi / Bridge / Server status cards
+│ ├── ScenarioControl.tsx # Fault scenario selector
+│ ├── IRMSGauge.tsx # IASI semicircular arc gauge
+│ ├── RiskBadge.tsx # Risk classification badge
+│ ├── SignalContinuity.tsx # Bridge health vertical gauge
+│ ├── IRMSTrendChart.tsx # 60-point rolling IASI trend line
+│ ├── FFTSpectrumChart.tsx # 51-bin FFT power spectrum
+│ ├── ObstacleLog.tsx # Obstacle detection event table
+│ └── SystemTelemetry.tsx # System stats readout panel
 ├── hooks/
-│   └── useSimulation.ts        # Central simulation hook — all synthetic data
+│ └── useSimulation.ts # Central simulation hook — all synthetic data
 ├── lib/
-│   └── constants.ts            # Scenarios, IRMS ranges, colour maps, credentials
+│ └── constants.ts # Scenarios, IASI ranges, color maps, credentials
 ├── types/
-│   └── index.ts                # TypeScript interfaces
-├── public/
-│   └── ir-logo.svg             # GR monogram SVG
-├── vercel.json                 # Vercel deployment config
-├── next.config.js              # Static export config
+│ └── index.ts # TypeScript interfaces
+├── public/ # Static assets
+├── vercel.json # Vercel deployment config
+├── next.config.js
 ├── tailwind.config.js
-├── tsconfig.json
 └── README.md
-```
+
 
 ---
 
@@ -189,10 +178,10 @@ axon-iiot/
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| Phase 1 | ✅ Complete | Simulation dashboard prototype — full UI, IRMS logic, 5 fault scenarios |
-| Phase 2 | 🔄 Planned | Raspberry Pi Zero 2W integration with real MPU6050 vibration sensor |
-| Phase 3 | 🔄 Planned | Android MQTT bridge + Ubuntu server ML pipeline (Isolation Forest + Random Forest) |
-| Phase 4 | 🔄 Planned | GPS fault tagging, multi-train support, YOLOv8n real-time obstacle inference |
+| Phase 1 | ✅ Complete | Simulation dashboard — full UI, IASI logic, 5 fault scenarios |
+| Phase 2 | 🔄 In Progress | Pi Zero 2W + MPU6050 real sensor integration, axon-server backend |
+| Phase 3 | 🔄 Planned | Android Termux CLI bridge, end-to-end pipeline validation |
+| Phase 4 | 🔄 Planned | GPS fault tagging, road quality monitoring, multi-vehicle support |
 
 ---
 
@@ -201,22 +190,21 @@ axon-iiot/
 | Name | Role |
 |------|------|
 | G Sai Sugeet | Lead Developer & System Architect |
-| John Benny J | ML Pipeline & IRMS Algorithm |
+| John Benny J | ML Pipeline & IASI Algorithm |
 | Neetha Udupa G | Communication Architecture |
 | S D Mukhesh | Hardware Integration & Testing |
 
 **Guide:** Dr. Agalya, Assistant Professor
 **Institution:** Dept. of Electrical & Electronics Engineering, New Horizon College of Engineering, Bengaluru — 560103
+**Subject Code:** 22EEE65 | **Academic Year:** 2025–26
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) — free to use for educational purposes.
+MIT License — free to use for educational and research purposes.
 
 ---
 
-```
-Built with ❤️ for Indian Railways Safety | New Horizon College of Engineering | 2025–26
-22EEE65 | Department of Electrical & Electronics Engineering
-```
+AXON v2.0 | Phase 1 Simulation Prototype
+Built for IEEE Publication | New Horizon College of Engineering | 2025–26

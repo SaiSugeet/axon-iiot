@@ -6,8 +6,8 @@ export const APP_SUBTITLE = 'Infrastructure Anomaly Detection System — Restric
 export const APP_FOOTER = 'AXON v2.0 | Phase 1 Simulation | New Horizon College of Engineering'
 
 export const AUTH_CREDENTIALS = {
-  username: 'axon_admin',
-  password: 'EdgeAI@2025',
+  username: 'SaiSugeet',
+  password: '2004',
 }
 
 export const SCENARIOS: Record<ScenarioKey, Scenario> = {
