@@ -141,35 +141,37 @@ Access Code: 2004
 
 ## 📁 Project Structure
 
+```text
 axon/
 ├── app/
-│ ├── layout.tsx # Root layout — fonts, metadata
-│ ├── page.tsx # Entry point — login gate / dashboard router
-│ └── globals.css # CSS variables, Tailwind base, animations
+│   ├── layout.tsx              # Root layout — fonts, metadata
+│   ├── page.tsx                # Entry point — login gate / dashboard router
+│   └── globals.css             # CSS variables, Tailwind base, animations
 ├── components/
-│ ├── LoginPage.tsx # Operator authentication screen
-│ ├── Dashboard.tsx # Main dashboard shell and layout
-│ ├── Navbar.tsx # Top navigation bar
-│ ├── DeviceStatusStrip.tsx # Pi / Bridge / Server status cards
-│ ├── ScenarioControl.tsx # Fault scenario selector
-│ ├── IRMSGauge.tsx # IASI semicircular arc gauge
-│ ├── RiskBadge.tsx # Risk classification badge
-│ ├── SignalContinuity.tsx # Bridge health vertical gauge
-│ ├── IRMSTrendChart.tsx # 60-point rolling IASI trend line
-│ ├── FFTSpectrumChart.tsx # 51-bin FFT power spectrum
-│ ├── ObstacleLog.tsx # Obstacle detection event table
-│ └── SystemTelemetry.tsx # System stats readout panel
+│   ├── LoginPage.tsx           # Operator authentication screen
+│   ├── Dashboard.tsx           # Main dashboard shell and layout
+│   ├── Navbar.tsx              # Top navigation bar
+│   ├── DeviceStatusStrip.tsx   # Pi / Bridge / Server status cards
+│   ├── ScenarioControl.tsx     # Fault scenario selector
+│   ├── IRMSGauge.tsx           # IASI semicircular arc gauge
+│   ├── RiskBadge.tsx           # Risk classification badge
+│   ├── SignalContinuity.tsx    # Bridge health vertical gauge
+│   ├── IRMSTrendChart.tsx      # 60-point rolling IASI trend line
+│   ├── FFTSpectrumChart.tsx    # 51-bin FFT power spectrum
+│   ├── ObstacleLog.tsx         # Obstacle detection event table
+│   └── SystemTelemetry.tsx     # System stats readout panel
 ├── hooks/
-│ └── useSimulation.ts # Central simulation hook — all synthetic data
+│   └── useSimulation.ts        # Central simulation hook — all synthetic data
 ├── lib/
-│ └── constants.ts # Scenarios, IASI ranges, color maps, credentials
+│   └── constants.ts            # Scenarios, IASI ranges, color maps, credentials
 ├── types/
-│ └── index.ts # TypeScript interfaces
-├── public/ # Static assets
-├── vercel.json # Vercel deployment config
-├── next.config.js # Next.js configuration
-├── tailwind.config.js # Tailwind CSS configuration
-└── README.md # Project documentation
+│   └── index.ts                # TypeScript interfaces
+├── public/                     # Static assets
+├── vercel.json                 # Vercel deployment config
+├── next.config.js              # Next.js configuration
+├── tailwind.config.js          # Tailwind CSS configuration
+└── README.md                   # Project documentation
+```
 
 
 ---
