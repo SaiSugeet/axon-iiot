@@ -25,3 +25,9 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# AXON server generated artifacts
+axon-server/models/*.joblib
+axon-server/*.db
+axon-server/__pycache__/
+*.pyc

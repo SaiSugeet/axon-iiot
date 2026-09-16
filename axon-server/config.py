@@ -1,0 +1,13 @@
+MQTT_BROKER = "localhost"
+MQTT_PORT = 1883
+MQTT_TOPICS = ["railway/vibration", "railway/obstacle", "railway/system/heartbeat"]
+SAMPLING_RATE = 500
+FFT_WINDOW_SIZE = 500
+IASI_W1 = 0.85
+IASI_W2 = 0.15
+IASI_ALERT_OVERRIDE_THRESHOLD = 0.65
+IASI_CRITICAL_OVERRIDE_THRESHOLD = 0.85
+DB_PATH = "axon_data.db"
+FLASK_PORT = 5000
+MODEL_DIR = "models/"
+API_KEY = "axon-server-key-2025"
