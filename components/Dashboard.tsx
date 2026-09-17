@@ -10,7 +10,7 @@ import SignalContinuity from './SignalContinuity'
 import ActiveAlerts from './ActiveAlerts'
 import IRMSTrendChart from './IRMSTrendChart'
 import FFTSpectrumChart from './FFTSpectrumChart'
-import ObstacleLog from './ObstacleLog'
+import TerminalPanel from './TerminalPanel'
 import SystemTelemetry from './SystemTelemetry'
 
 interface Props {
@@ -95,7 +95,7 @@ export default function Dashboard({ operator, onLogout }: Props) {
           </div>
 
           <div className="axon-row-c" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, minHeight: 0 }}>
-            <ObstacleLog log={sim.obstacleLog} />
+            <TerminalPanel />
             <SystemTelemetry status={sim.deviceStatus} />
           </div>
         </div>
