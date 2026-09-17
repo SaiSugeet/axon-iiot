@@ -1,6 +1,8 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
 import { useSimulation } from '@/hooks/useSimulation'
+import { useRealData } from '@/hooks/useRealData'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import IRMSGauge from './IRMSGauge'
@@ -17,7 +19,37 @@ interface Props {
 }
 
 export default function Dashboard({ operator, onLogout }: Props) {
-  const sim = useSimulation()
+  const simulation = useSimulation()
+  const real = useRealData()
+
+  // Default to live mode if the API answers within 3s of mount, otherwise
+  // fall back to simulation. Once the operator toggles manually, stop
+  // auto-deciding — their choice wins.
+  const [mode, setMode] = useState<'live' | 'simulation'>('simulation')
+  const autoDecided = useRef(false)
+  const userChose = useRef(false)
+
+  useEffect(() => {
+    if (userChose.current || autoDecided.current) return
+    if (real.isConnected) {
+      autoDecided.current = true
+      setMode('live')
+      return
+    }
+    const timer = setTimeout(() => {
+      if (userChose.current || autoDecided.current) return
+      autoDecided.current = true
+      setMode(real.isConnected ? 'live' : 'simulation')
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [real.isConnected])
+
+  const toggleMode = () => {
+    userChose.current = true
+    setMode(m => (m === 'live' ? 'simulation' : 'live'))
+  }
+
+  const sim = mode === 'live' ? real : simulation
 
   return (
     <div className="dash-fade axon-root" style={{
@@ -25,7 +57,13 @@ export default function Dashboard({ operator, onLogout }: Props) {
       display: 'flex', flexDirection: 'column',
       background: 'var(--axon-bg)',
     }}>
-      <Navbar operator={operator} onLogout={onLogout} />
+      <Navbar
+        operator={operator}
+        onLogout={onLogout}
+        mode={mode}
+        isConnected={real.isConnected}
+        onToggleMode={toggleMode}
+      />
 
       <div className="axon-body" style={{ flex: 1, minHeight: 0, display: 'flex' }}>
         <div className="axon-sidebar-wrap" style={{ display: 'flex' }}>

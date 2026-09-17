@@ -14,11 +14,13 @@ scenario_label = "UNKNOWN"
 latest_fft = None
 
 def normalize_anomaly_score(raw_score):
-    # IsolationForest decision_function returns negative values
-    # More negative = more anomalous
-    # Convert to [0,1] where 1 = highly anomalous
-    clipped = max(-0.5, min(0.5, raw_score))
-    return round(1.0 - (clipped + 0.5), 4)
+    # IsolationForest decision_function:
+    # Positive = normal, negative = anomalous
+    # Typical normal range: +0.05 to +0.15
+    # Typical anomaly range: -0.1 to -0.3
+    # Map so that +0.1 (normal) -> ~0.05, -0.2 (anomalous) -> ~0.90
+    normalized = 1.0 / (1.0 + pow(2.718281828, 15.0 * raw_score))
+    return round(min(max(normalized, 0.0), 1.0), 4)
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:

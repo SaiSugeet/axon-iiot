@@ -5,11 +5,14 @@ import { useState, useEffect } from 'react'
 interface Props {
   operator: string
   onLogout: () => void
+  mode: 'live' | 'simulation'
+  isConnected: boolean
+  onToggleMode: () => void
 }
 
 function pad(n: number) { return String(n).padStart(2, '0') }
 
-export default function Navbar({ operator, onLogout }: Props) {
+export default function Navbar({ operator, onLogout, mode, isConnected, onToggleMode }: Props) {
   const [now, setNow] = useState(new Date())
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
@@ -18,6 +21,14 @@ export default function Navbar({ operator, onLogout }: Props) {
 
   const ts = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
   const dt = now.toISOString().slice(0, 10)
+
+  const isLive = mode === 'live'
+  const dotColor = isLive
+    ? (isConnected ? 'var(--axon-accent)' : 'var(--axon-alert)')
+    : 'var(--axon-text-dim)'
+  const modeLabel = isLive
+    ? (isConnected ? 'LIVE' : 'LIVE — RECONNECTING')
+    : 'SIM'
 
   return (
     <nav style={{
@@ -28,16 +39,45 @@ export default function Navbar({ operator, onLogout }: Props) {
       flexShrink: 0,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          padding: '5px 12px',
-          border: '1px solid var(--axon-border)',
-          background: 'var(--axon-surface-2)',
-          fontFamily: 'var(--font-mono)', fontSize: 10.5,
-          letterSpacing: 2, color: 'var(--axon-text-secondary)',
-        }}>
-          <span className="live-dot" />
-          CENTRAL MONITORING — LIVE
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '5px 12px',
+            border: '1px solid var(--axon-border)',
+            background: 'var(--axon-surface-2)',
+            fontFamily: 'var(--font-mono)', fontSize: 10.5,
+            letterSpacing: 2, color: 'var(--axon-text-secondary)',
+          }}>
+            <span
+              className={isLive && isConnected ? 'live-dot' : undefined}
+              style={{
+                width: 7, height: 7, borderRadius: '50%',
+                background: dotColor, display: 'inline-block',
+              }}
+            />
+            CENTRAL MONITORING — {modeLabel}
+          </div>
+
+          <button
+            onClick={onToggleMode}
+            style={{
+              background: 'transparent',
+              border: '1px solid var(--axon-border-strong)',
+              color: 'var(--axon-text-secondary)',
+              padding: '5px 12px',
+              fontFamily: 'var(--font-inter)', fontWeight: 600,
+              fontSize: 10.5, letterSpacing: 1.5, cursor: 'pointer',
+              transition: 'all .15s',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--axon-accent)'
+              ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--axon-accent)'
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--axon-border-strong)'
+              ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--axon-text-secondary)'
+            }}
+          >{isLive ? 'LIVE MODE' : 'SIMULATION MODE'}</button>
         </div>
 
         <div style={{
